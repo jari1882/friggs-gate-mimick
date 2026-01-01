@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Friggs Gate - Coming Soon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            color: white;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: url('assets/friggs-gate-background.png') center/cover no-repeat;
+            background-attachment: fixed;
+            filter: blur(2px);
+            z-index: -2;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+        .container {
+            position: relative;
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        /* Realistic construction tape with classic pattern */
+        .construction-tape {
+            position: absolute;
+            left: -10%;
+            right: -10%;
+            height: 30px;
+            border-top: 2px solid #E6C200;
+            border-bottom: 2px solid #E6C200;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 11px;
+            font-weight: bold;
+            color: #000;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+            letter-spacing: 2px;
+            overflow: hidden;
+            background: repeating-linear-gradient(
+                45deg,
+                #FFD700 0px,
+                #FFD700 15px,
+                #000000 15px,
+                #000000 30px
+            );
+            min-width: 120%;
+        }
+
+        .construction-tape-1 {
+            top: 40%;
+            transform: rotate(-12deg);
+        }
+
+        .construction-tape-2 {
+            top: 60%;
+            transform: rotate(-8deg);
+        }
+        
+        .tape-text {
+            background: #FFD700;
+            padding: 5px 20px;
+            border-radius: 2px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .contact-box {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to bottom, #FFD700 0%, #F5C842 50%, #FFD700 100%);
+            color: #000;
+            padding: 8px 16px;
+            border: 3px solid transparent;
+            border-image: repeating-linear-gradient(
+                45deg,
+                #FFD700 0px,
+                #FFD700 4px,
+                #000000 4px,
+                #000000 8px
+            ) 1;
+            border-radius: 4px;
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+            z-index: 20;
+            max-width: calc(100vw - 40px);
+            word-wrap: break-word;
+        }
+
+        /* Mobile-specific styles */
+        @media screen and (max-width: 768px) {
+            body::before {
+                background-attachment: scroll;
+                background-size: cover;
+                background-position: center center;
+            }
+
+            .contact-box {
+                top: 10px;
+                font-size: 10px;
+                padding: 6px 12px;
+                max-width: calc(100vw - 20px);
+            }
+
+            .construction-tape {
+                height: 25px;
+                font-size: 9px;
+                letter-spacing: 1px;
+            }
+
+            .tape-text {
+                padding: 4px 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .contact-box {
+                font-size: 9px;
+                padding: 5px 10px;
+            }
+
+            .construction-tape {
+                height: 20px;
+                font-size: 8px;
+                letter-spacing: 0.5px;
+            }
+
+            .tape-text {
+                padding: 3px 10px;
+            }
+        }
+
+        /* iOS Safari specific fixes */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                min-height: -webkit-fill-available;
+            }
+
+            body::before,
+            body::after {
+                height: -webkit-fill-available;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Contact box -->
+        <div class="contact-box">Contact: <a href="mailto:rod.rishel@life-nervous-system.com" style="color: #0066cc; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">rod.rishel@life-nervous-system.com</a></div>
+        
+        <!-- Realistic construction tape pieces -->
+        <div class="construction-tape construction-tape-1">
+            <div class="tape-text">UNDER CONSTRUCTION - COMING SOON - UNDER CONSTRUCTION</div>
+        </div>
+        <div class="construction-tape construction-tape-2">
+            <div class="tape-text">COMING SOON - UNDER CONSTRUCTION - COMING SOON</div>
+        </div>
+    </div>
+</body>
+</html>
