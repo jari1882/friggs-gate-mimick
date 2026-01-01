@@ -10,6 +10,7 @@ export const commands = {
     "/spreadsheet": "GENERATE_SPREADSHEET_COMMAND",
     "/png": "GENERATE_PNG_COMMAND",
     "/md": "GENERATE_MARKDOWN_COMMAND",
-    "/md2": "GENERATE_MARKDOWN_LONG_COMMAND"
+    "/md2": "GENERATE_MARKDOWN_LONG_COMMAND",
+    "/sim": "SIM_KB_TEST_COMMAND"
   }
 };

@@ -67,7 +67,8 @@ export function ChatWindow() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [mainChatWidth, setMainChatWidth] = useState(0);
-  
+  const [isSimMode, setIsSimMode] = useState(false);
+
   // Clean WebSocket connection - just send text, get text
   const { sendMessage: sendWebSocketMessage, status: wsStatus, error: wsError, isConnected } = useWebSocket();
   
@@ -143,6 +144,60 @@ export function ChatWindow() {
     
     // Check for special commands first
     if (messageValue in commands.special) {
+      if (messageValue === "/sim") {
+        // Handle SIM-KB Test mode
+        setInput("");
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { id: Math.random().toString(), content: messageValue, role: "user" },
+        ]);
+
+        if (isSimMode) {
+          // Exit sim mode
+          setIsSimMode(false);
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              id: Math.random().toString(),
+              content: "Exited SIM-KB mode. You're now back in the regular chat.",
+              role: "assistant"
+            }
+          ]);
+        } else {
+          // Enter sim mode
+          setIsSimMode(true);
+          const welcomeMessage = `# Welcome to SIM-KB Test Mode
+
+You're now in SIM-KB mode! Ask me anything about the insurance carriers in the knowledge base.
+
+## Example Questions:
+- "What carriers do we have data for?"
+- "Tell me about Protective Life"
+- "How did Protective Life perform in Annuities?"
+- "What are the BPSer team roles?"
+
+## Commands:
+- **clear** - Clear conversation history
+- **stats** - Show database statistics
+- **help** - Show this help message
+- **/sim** - Exit SIM-KB mode
+
+Type your question below to get started!`;
+
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              id: Math.random().toString(),
+              content: welcomeMessage,
+              role: "assistant"
+            }
+          ]);
+        }
+
+        hideEmptyStateButtons();
+        return;
+      }
+
       if (messageValue === "/pdf") {
         // Handle PDF generation command
         setInput("");
@@ -428,7 +483,7 @@ export function ChatWindow() {
     
     // Hide empty state buttons when user sends a message
     hideEmptyStateButtons();
-    
+
     setInput("");
     setMessages((prevMessages) => [
       ...prevMessages,
@@ -437,10 +492,39 @@ export function ChatWindow() {
     setIsLoading(true);
 
     try {
-      // Send message directly to Rainbow Bridge - just text in, text out
-      console.log('🔍 About to call sendWebSocketMessage with:', messageValue);
-      const response = await sendWebSocketMessage(messageValue);
-      console.log('🔍 Got response from sendWebSocketMessage:', response);
+      let response: string;
+
+      // Route to SIM-KB backend if in sim mode
+      if (isSimMode) {
+        console.log('🔍 In SIM mode, calling sim backend with:', messageValue);
+        const simResponse = await fetch('http://localhost:5001/sim/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: messageValue,
+            session_id: 'default'
+          })
+        });
+
+        if (!simResponse.ok) {
+          throw new Error(`SIM-KB server error: ${simResponse.statusText}`);
+        }
+
+        const simData = await simResponse.json();
+        if (!simData.success) {
+          throw new Error(simData.error || 'SIM-KB server returned error');
+        }
+
+        response = simData.response;
+        console.log('🔍 Got response from SIM backend:', response);
+      } else {
+        // Send message directly to Rainbow Bridge - just text in, text out
+        console.log('🔍 About to call sendWebSocketMessage with:', messageValue);
+        response = await sendWebSocketMessage(messageValue);
+        console.log('🔍 Got response from sendWebSocketMessage:', response);
+      }
       
       // Setup markdown renderer
       let renderer = new Renderer();
